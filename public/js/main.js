@@ -1,10 +1,18 @@
 var openstreetmap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-var osm_forest   = L.tileLayer('http://tile.thunderforest.com/landscape/{z}/{x}/{y}.png');
+var osm_forest = L.tileLayer('http://tile.thunderforest.com/landscape/{z}/{x}/{y}.png');
+
+// criar pagina em branco.
+var white = L.tileLayer("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEAAQMAAABmvDolAAAAA1BMVEX///+nxBvIAAAAH0lEQVQYGe3BAQ0AAADCIPunfg43YAAAAAAAAAAA5wIhAAAB9aK9BAAAAABJRU5ErkJggg==");
+
+var drenagem = L.geoJson.ajax('drenagem');
+
+var lat = -21.76219;
+var lng = -43.35046;
 
 var map = L.map('map-template', {
-    center: [51.505, -0.09],
+    center: [lat, lng],
     zoom: 10,
-    layers: [openstreetmap, osm_forest]
+    layers: [openstreetmap, osm_forest, white]
 });
 
 var baseMaps = {
@@ -13,15 +21,12 @@ var baseMaps = {
 };
 
 var overlayMaps = {
-    //"Cities": cities
+    "Drenagem": drenagem,
 };
 
 L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-//var map = L.map('map-template').setView([51.505, -0.09], 13);
-
-//L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-
-L.marker([51.5, -0.09]).addTo(map)
-    .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+L.marker([lat, lng]).addTo(map)
+    .bindPopup('Juiz de Fora - MG')
     .openPopup();
+

@@ -1,6 +1,7 @@
 const express = require('express');
 const engine = require('ejs-mate');
 const path = require('path');
+const fs = require('fs');
 
 // inicializacao
 const app = express();
@@ -12,6 +13,9 @@ app.set('views', path.join(__dirname, 'views'));
 
 //rotas
 app.use(require('./rotas/'));
+
+// camadas
+app.use(require('./pg/'));
 
 // arquivos estaticos
 app.use(express.static(path.join(__dirname, 'public')));
