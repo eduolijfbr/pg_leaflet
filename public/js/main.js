@@ -17,28 +17,29 @@ var map = L.map('map-template', {
 });
 
 drenagem = L.geoJson.ajax('drenagem');
-//drenagem.addTo(map);
-
 
 map.on('move', function() {
 	zoomLev = map.getZoom();
-	console.log(zoomLev);
+	
     if(zoomLev >= 16){
 		map.removeLayer(lotes);
 		lotes.clearLayers();
-		var ext = map.getBounds();
 
-		map.fitBounds(ext);
 		var ext = map.getBounds();
+		map.fitBounds(ext);
 		var ext = map.getBounds();
 		var nelng = ext._northEast.lng;
 		var nelat = ext._northEast.lat;
 		var swlng = ext._southWest.lng;
 		var swlat = ext._southWest.lat;
-		lotes = L.geoJson.ajax('lotes/'+nelng+'/'+nelat+'/'+swlng+'/'+swlat);
+
+		lotes = L.geoJson.ajax('lotes/'+nelng+'/'+nelat+'/'+swlng+'/'+swlat, {style: polySymbol_lotes});
 		lotes.addTo(map);
-		//console.log(lotes, points);
-	}	
+		
+	}else{
+		map.removeLayer(lotes);
+		lotes.clearLayers();
+	}
 });
 
 var baseMaps = {    
@@ -49,8 +50,13 @@ var baseMaps = {
 
 var overlayMaps = {
     "Drenagem": drenagem,
-    "Lotes": lotes
+    //"Lotes": lotes
 };
 
 L.control.layers(baseMaps, overlayMaps).addTo(map);
 
+polySymbol_lotes = {
+	color: "#000000",
+	weight: 2,
+	fillOpacity: 0
+};
