@@ -12,56 +12,34 @@ var lng = -43.35046;
 
 var map = L.map('map-template', {
     center: [lat, lng],
-    zoom: 16,
+    zoom: 15,
     layers: [openstreetmap]
 });
 
-function func_drenagem(){
-	drenagem = L.geoJson.ajax('drenagem');
-	return drenagem;
-}
+drenagem = L.geoJson.ajax('drenagem');
+//drenagem.addTo(map);
 
-function func_lotes(){
-	var ext = map.getBounds();
-	var nelng = ext._northEast.lng;
-	var nelat = ext._northEast.lat;
-	var swlng = ext._southWest.lng;
-	var swlat = ext._southWest.lat;
 
-	lotes = L.geoJson.ajax('lotes/'+nelng+'/'+nelat+'/'+swlng+'/'+swlat);
-	return lotes;
-	console.log("teste");
-}
-
-map.on('moveend', function() {
+map.on('move', function() {
 	zoomLev = map.getZoom();
-	
-	if (zoomLev >= 15){
-		func_lotes();
-	}
-	if (zoomLev < 15){		
-		func_drenagem();
-	}
-	
 	console.log(zoomLev);
-})
-
-map.on('zoomend', function(){
-	var z = map.getZoom();
-	
-	if (z >= 15) {
-		lotes.addTo(map);
-	}
-	if (z < 15){
+    if(zoomLev >= 16){
 		map.removeLayer(lotes);
 		lotes.clearLayers();
-		lotes.removeFrom(map);
-	}
-	
-});
+		var ext = map.getBounds();
 
-func_drenagem();
-func_lotes();
+		map.fitBounds(ext);
+		var ext = map.getBounds();
+		var ext = map.getBounds();
+		var nelng = ext._northEast.lng;
+		var nelat = ext._northEast.lat;
+		var swlng = ext._southWest.lng;
+		var swlat = ext._southWest.lat;
+		lotes = L.geoJson.ajax('lotes/'+nelng+'/'+nelat+'/'+swlng+'/'+swlat);
+		lotes.addTo(map);
+		//console.log(lotes, points);
+	}	
+});
 
 var baseMaps = {    
 	"openstreetmap": openstreetmap,
@@ -75,8 +53,4 @@ var overlayMaps = {
 };
 
 L.control.layers(baseMaps, overlayMaps).addTo(map);
-/*
-L.marker([lat, lng]).addTo(map)
-    .bindPopup('Juiz de Fora - MG')
-    .openPopup();
-*/
+
