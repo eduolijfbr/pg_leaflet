@@ -48,7 +48,7 @@ camadas.get('/lotes/:nelng/:nelat/:swlng/:swlat', (request, response) => {
 	    response.status(200).json(origin);
 
     })
-    
+   
 })
 
 module.exports = camadas;
