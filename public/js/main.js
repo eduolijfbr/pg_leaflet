@@ -18,6 +18,21 @@ var map = L.map('map-template', {
 
 drenagem = L.geoJson.ajax('drenagem');
 
+function bounds(){
+
+	var ext = map.getBounds();
+	map.fitBounds(ext);
+	var ext = map.getBounds();
+	var nelng = ext._northEast.lng;
+	var nelat = ext._northEast.lat;
+	var swlng = ext._southWest.lng;
+	var swlat = ext._southWest.lat;
+
+	var text = +nelng+'/'+nelat+'/'+swlng+'/'+swlat;
+	return text;
+
+}
+
 map.on('move', function() {
 	zoomLev = map.getZoom();
 	
@@ -25,15 +40,9 @@ map.on('move', function() {
 		map.removeLayer(lotes);
 		lotes.clearLayers();
 
-		var ext = map.getBounds();
-		map.fitBounds(ext);
-		var ext = map.getBounds();
-		var nelng = ext._northEast.lng;
-		var nelat = ext._northEast.lat;
-		var swlng = ext._southWest.lng;
-		var swlat = ext._southWest.lat;
-
-		lotes = L.geoJson.ajax('lotes/'+nelng+'/'+nelat+'/'+swlng+'/'+swlat, {style: polySymbol_lotes});
+		var text = bounds();
+		lotes = L.geoJson.ajax('lotes/'+text, {style: polySymbol_lotes});
+		//lotes = L.geoJson.ajax('lotes/'+nelng+'/'+nelat+'/'+swlng+'/'+swlat, {style: polySymbol_lotes});
 		lotes.addTo(map);
 		
 	}else{
